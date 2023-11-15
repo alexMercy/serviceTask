@@ -1,9 +1,10 @@
 import {Breadcrumb, Button, Card, Skeleton, Table} from "antd";
 import {useEffect, useState} from "react";
 import {getFileNode} from "../utils/fetches.ts";
-import {FlatData} from "../utils/types.ts";
+import {DataType, FlatData} from "../utils/types.ts";
 import {convertToMenuItems, convertToSideMenuItems} from "../utils/menu-items-converters.tsx";
 import {BreadcrumbItemType} from "antd/es/breadcrumb/Breadcrumb";
+import { ColumnType} from "antd/es/table";
 
 
 export function BrowserPage() {
@@ -14,19 +15,18 @@ export function BrowserPage() {
     const [isSideMenuLoad, setIsSideMenuLoad] = useState(false);
     const [isMenuLoad, setIsMenuLoad] = useState(false);
 
-    //TODO: переписать типы
-    const column: any = {
+    const column: ColumnType<DataType> = {
             title: 'Name',
             dataIndex: 'name',
             key: 'name',
-            sorter:(a, b) => {
+            sorter:(a: DataType, b: DataType) => {
                 return a.name.localeCompare(b.name)
             },
         }
 
     const sideMenuColumns = [{
             ...column,
-            render: (text, data) =>
+            render: (text: string, data: DataType) =>
                 <div className="w-full h-full cursor-default"
                      onClick={()=>onSideMenuClick(data)}>
                     {data.icon} {text}
@@ -35,7 +35,7 @@ export function BrowserPage() {
 
     const menuColumns = [{
         ...column,
-        render: (text, data) =>
+        render: (text: string, data: DataType) =>
             <div className="w-full h-full cursor-default"
                  onClick={()=>onMenuClick(data)}>
                 {data.icon} {text}
@@ -51,7 +51,7 @@ export function BrowserPage() {
         })
     },[]);
 
-    const onSideMenuClick = ({key, name}) => {
+    const onSideMenuClick = ({key, name}: DataType) => {
         setIsMenuLoad(true);
 
         getFileNode(key).then(({data}) => {
@@ -61,7 +61,7 @@ export function BrowserPage() {
         })
     }
 
-    const onMenuClick = ({key, name}: any) => {
+    const onMenuClick = ({key, name}: DataType) => {
         const item = childItems.find(item => item.key === key)!;
         if (!item.isDir) return;
         setParentItems(childItems);
@@ -79,7 +79,7 @@ export function BrowserPage() {
         const parentKey = path && path[path.length-3]
             ? path[path.length-3].id : '';
         getFileNode(parentKey).then(({data}) => {
-            let arg: FlatData[] = []
+            let arg: FlatData[]
             switch (parentKey) {
                 case "":
                     arg = path.length ? [data.parent] : [];

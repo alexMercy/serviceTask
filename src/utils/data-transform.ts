@@ -20,19 +20,3 @@ export const flatData = (function (){
 
     return obj;
 })()
-
-export const indexedData = (function () {
-
-    const indexer = (data: Data[]) => {
-        const obj: {[k:string]: any} = {}
-        data.forEach(item => {
-            obj[item.key] = item.children?.length
-                ? {...item, children: indexer(item.children)}
-                : item
-            }
-        )
-        return obj;
-    }
-
-    return indexer(data);
-})()

@@ -18,4 +18,4 @@ export function AuthPage() {
             <Button onClick={onClick}>Log in</Button>
         </div>
     );
-};
+}

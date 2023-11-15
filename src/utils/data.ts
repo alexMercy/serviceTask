@@ -19,7 +19,6 @@ export const convertDataToTreeData = () => {
         })
         return  result;
     }
-
 }
 
  const data: Data[] = [

@@ -6,14 +6,13 @@ export function ProtectedRoutes() {
     const navigate = useNavigate();
     const location = useLocation();
     const isAuth = isAuthentication();
-    console.log(location);
 
     useEffect(()=> {
 
         if(isAuth && location.pathname === "/login") navigate("/");
         if(!isAuth && !["/", "/login"].includes(location.pathname)) navigate("/login")
 
-    }, [location.pathname])
+    }, [location.pathname, isAuth, navigate])
 
 
     return (

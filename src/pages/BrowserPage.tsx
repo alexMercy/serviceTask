@@ -57,7 +57,10 @@ export function BrowserPage() {
         getFileNode(key).then(({data}) => {
             setChildItems(data.childs)
             setIsMenuLoad(false);
-            setPath((prevState) => [...prevState, {title: name, key} as BreadcrumbItemType & {id: string}])
+            setPath((prevState) => {
+                prevState.pop();
+                return [...prevState, {title: name, key} as BreadcrumbItemType & { id: string }]
+            })
         })
     }
 

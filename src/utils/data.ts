@@ -1,27 +1,6 @@
-import {TreeDataNode} from "antd";
+import {Data} from "./types.ts";
 
-interface Data {
-    key: string,
-    name: string,
-    children?: Data[]
-}
-
-export const convertDataToTreeData = () => {
-    return convert(data)
-
-    function convert(data: Data[]) {
-        const result:TreeDataNode[] = []
-        data.forEach(item => {
-            const {name, key, children} = item;
-            result.push(children && children.length
-                ? {title: name, key, children: convert(children)}
-                : {title: name, key})
-        })
-        return  result;
-    }
-}
-
- const data: Data[] = [
+export const data: Data[] = [
     {
         key: '_',
         name: 'root',
@@ -128,3 +107,4 @@ export const convertDataToTreeData = () => {
         ],
     },
 ];
+

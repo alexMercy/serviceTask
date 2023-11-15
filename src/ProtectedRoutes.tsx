@@ -1,6 +1,7 @@
 import {Outlet, useLocation, useNavigate} from "react-router-dom";
 import {useEffect} from "react";
-import {isAuthentication} from "./utils/utils.ts";
+
+import {isAuthentication} from "./utils/auth.ts";
 
 export function ProtectedRoutes() {
     const navigate = useNavigate();
@@ -13,7 +14,6 @@ export function ProtectedRoutes() {
         if(!isAuth && !["/", "/login"].includes(location.pathname)) navigate("/login")
 
     }, [location.pathname, isAuth, navigate])
-
 
     return (
         <Outlet />

@@ -1,6 +1,6 @@
 import {Button} from "antd";
-import {setAuth} from "../utils/utils.ts";
 import {useNavigate} from "react-router-dom";
+import {setAuth} from "../utils/auth.ts";
 
 
 export function AuthPage() {

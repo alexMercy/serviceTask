@@ -1,7 +1,7 @@
 import { Outlet, useLocation, useNavigate} from "react-router-dom";
 import {Button} from "antd";
-import {isAuthentication, setAuth} from "../utils/utils.ts";
 import {useEffect, useState} from "react";
+import {isAuthentication, setAuth} from "../utils/auth.ts";
 
 
 export function Layout() {

@@ -11,11 +11,11 @@ export const getFileNode = (nodeKey = '') => {
 }
 
 function getLocalFileNode(nodeKey: string): Promise<{data: FileNode }>{
-
-    const parent = flatData[nodeKey];
+    const parentNodeKey = nodeKey || "_";
+    const parent = flatData[parentNodeKey];
     const childs = Object.values(flatData)
         .filter(({key}) => {
-            const reKey = nodeKey ? `${nodeKey}-` : ''
+            const reKey = parentNodeKey !== "_" ? `${nodeKey}-` : ''
             const re = new RegExp(`^${reKey}[0-9]$`);
             return key.match(re)
         })

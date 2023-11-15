@@ -15,7 +15,7 @@ export function AuthPage() {
             <header>
                 AUTH
             </header>
-            <Button onClick={onClick}>Войти</Button>
+            <Button onClick={onClick}>Log in</Button>
         </div>
     );
 };

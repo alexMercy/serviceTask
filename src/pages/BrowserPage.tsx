@@ -7,6 +7,7 @@ import {BreadcrumbItemType} from "antd/es/breadcrumb/Breadcrumb";
 import { ColumnType} from "antd/es/table";
 import Search from "antd/es/input/Search";
 import {createBreadcrumbs} from "../utils/create-breadcrumbs.ts";
+import "./BrowserPageStyle.css";
 
 
 export function BrowserPage() {
@@ -32,7 +33,7 @@ export function BrowserPage() {
     const sideMenuColumns = [{
             ...column,
             render: (text: string, data: DataType) =>
-                <div className="w-full h-full cursor-default"
+                <div className="w-full h-full cursor-default px-4 flex items-center gap-4"
                      onClick={()=>onSideMenuClick(data)}>
                     {data.icon} {text}
                 </div>
@@ -41,7 +42,7 @@ export function BrowserPage() {
     const menuColumns = [{
         ...column,
         render: (text: string, data: DataType) =>
-            <div className="w-full h-full cursor-default"
+            <div className="w-full h-full cursor-default px-4 flex items-center gap-4"
                  onClick={()=>onMenuClick(data)}>
                 {data.icon} {text}
             </div>
@@ -130,7 +131,7 @@ export function BrowserPage() {
 
     return (
         <>
-            <div className="grid grid-cols-4 h-full" style={{gap: 40}}>
+            <div className="grid grid-cols-4 h-full browse" style={{gap: 40}}>
                 <Card className="h-full"
                       title={<Button disabled={!path.length} onClick={onBackClick}>back</Button>}
                       extra={<Search loading={isSearch} placeholder="Search..." onSearch={onSearch} />}>

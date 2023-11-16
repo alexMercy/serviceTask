@@ -12,7 +12,6 @@ export const getFileNode = (nodeKey = '') => {
 
 function getLocalFileNode(nodeKey: string): Promise<{data: FileNode }>{
     const parentNodeKey = nodeKey || "_";
-    console.log(flatData);
     const parent = flatData[parentNodeKey];
     const childs = Object.values(flatData)
         .filter(({key}) => {
@@ -63,16 +62,6 @@ function getLocalSiblings(nodeKey:string): Promise<{data: SiblingsFileNode }> {
                     return key.match(re)
                 })
     }
-
-
-     // Object.values(flatData)
-     //    .filter(({key}) => {
-     //        const isDigit = !!nodeKey.match(/^[0-9]$/)
-     //        const reKey = isDigit ? '' : `${nodeKey}-`
-     //        const re = new RegExp(`^${reKey}[0-9]$`);
-     //        return key.match(re)
-     //    })
-
 
     return new Promise(resolve => {
         setTimeout(()=>{

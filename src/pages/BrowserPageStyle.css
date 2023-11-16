@@ -1,0 +1,8 @@
+.browse .ant-table-tbody{
+    padding: 0 !important;
+
+}
+.browse .ant-table-tbody > tr > td {
+    padding: 0 !important;
+    height: 54px !important;
+}

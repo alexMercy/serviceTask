@@ -6,7 +6,7 @@ export const flatData = (function (){
     const flatter = (data: Data[], parentKey = "") => {
 
        data.forEach(({children, ...rest})=>{
-           if(children?.length) {
+           if(children) {
                obj[rest.key] = {...rest, isDir: true, parentKey}
                flatter(children, rest.key)
            }

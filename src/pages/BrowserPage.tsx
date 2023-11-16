@@ -1,19 +1,24 @@
-import {Breadcrumb, Button, Card, Skeleton, Table} from "antd";
+import {Breadcrumb, Button, Card, message, Skeleton, Table} from "antd";
 import {useEffect, useState} from "react";
-import {getFileNode} from "../utils/fetches.ts";
+import {getFileNode, getSiblings, search} from "../utils/fetches.ts";
 import {DataType, FlatData} from "../utils/types.ts";
 import {convertToMenuItems, convertToSideMenuItems} from "../utils/menu-items-converters.tsx";
 import {BreadcrumbItemType} from "antd/es/breadcrumb/Breadcrumb";
 import { ColumnType} from "antd/es/table";
+import Search from "antd/es/input/Search";
+import {createBreadcrumbs} from "../utils/create-breadcrumbs.ts";
 
 
 export function BrowserPage() {
+    const [messageApi, contextHolder] = message.useMessage();
+
     const [path, setPath] = useState([] as (BreadcrumbItemType & {id: string})[]);
     const [parentItems, setParentItems] = useState([] as FlatData[]);
     const [childItems, setChildItems] = useState([] as FlatData[]);
 
     const [isSideMenuLoad, setIsSideMenuLoad] = useState(false);
     const [isMenuLoad, setIsMenuLoad] = useState(false);
+    const [isSearch, setIsSearch] = useState(false)
 
     const column: ColumnType<DataType> = {
             title: 'Name',
@@ -99,35 +104,62 @@ export function BrowserPage() {
         })
     }
 
-        return (
-        <div className="grid grid-cols-4 h-full" style={{gap: 40}}>
-            <Card className="h-full" title={<Button disabled={!path.length} onClick={onBackClick}>back</Button>}>
-                {isSideMenuLoad
-                    ? <div className="flex gap-2 flex-col">
-                        {[1,2,3,4].map((v)=> <Skeleton.Button key={v} active block />)}
-                    </div>
-                    : <Table columns={sideMenuColumns}
-                             dataSource={convertToSideMenuItems(parentItems)}
-                             className="h-full"
-                             pagination={false}/>
+    function onSearch(text: string) {
+        if(!text) return;
+        setIsSearch(true)
+        search(text).then(({data}) => {
+            setIsSearch(false)
+            if(!data) return messageApi.error("Entity not found.");
 
-                }
-            </Card>
+            setIsMenuLoad(true);
+            setIsSideMenuLoad(true);
 
-            <Card className="col-span-3 h-full"
-                  title={<Breadcrumb items={path}/> }
-            >
-                {isMenuLoad
-                    ? <div className="flex gap-2 flex-col">
-                        {[1,2,3,4].map((v)=> <Skeleton.Button key={v} active block />)}
-                    </div>
-                    : <Table columns={menuColumns}
-                             dataSource={convertToMenuItems(childItems)}
-                             className="h-full"
-                             pagination={false}/>
-                }
-            </Card>
-        </div>
+            getSiblings(data.key).then(({data: siblings}) => {
+                setChildItems(siblings.siblings);
+                setIsMenuLoad(false);
+                setPath(createBreadcrumbs(siblings.parent));
 
-    );
+                getSiblings(siblings.parent.key).then(({data: siblings}) => {
+                    setParentItems(siblings.siblings);
+                    setIsSideMenuLoad(false);
+                })
+
+            })
+        })
+    }
+
+    return (
+        <>
+            <div className="grid grid-cols-4 h-full" style={{gap: 40}}>
+                <Card className="h-full"
+                      title={<Button disabled={!path.length} onClick={onBackClick}>back</Button>}
+                      extra={<Search loading={isSearch} placeholder="Search..." onSearch={onSearch} />}>
+                    {isSideMenuLoad
+                        ? <div className="flex gap-2 flex-col">
+                            {[1,2,3,4].map((v)=> <Skeleton.Button key={v} active block />)}
+                        </div>
+                        : <Table columns={sideMenuColumns}
+                                 dataSource={convertToSideMenuItems(parentItems)}
+                                 className="h-full"
+                                 pagination={false}/>
+
+                    }
+                </Card>
+
+                <Card className="col-span-3 h-full"
+                      title={<Breadcrumb items={path}/> }
+                >
+                    {isMenuLoad
+                        ? <div className="flex gap-2 flex-col">
+                            {[1,2,3,4].map((v)=> <Skeleton.Button key={v} active block />)}
+                        </div>
+                        : <Table columns={menuColumns}
+                                 dataSource={convertToMenuItems(childItems)}
+                                 className="h-full"
+                                 pagination={false}/>
+                    }
+                </Card>
+            </div>
+            {contextHolder}
+        </>);
 }

@@ -6,12 +6,18 @@ export interface Data {
     children?: Data[]
 }
 
-export type FlatData = Omit<Data, "children"> & { isDir: boolean };
+export type FlatData = Omit<Data, "children"> & { isDir: boolean, parentKey: string };
 
 export interface FileNode  {
         parent: FlatData,
         childs: FlatData[]
 }
+
+export interface SiblingsFileNode {
+        parent: FlatData,
+        siblings: FlatData[]
+}
+
 
 export interface DataType {
     key: string;
